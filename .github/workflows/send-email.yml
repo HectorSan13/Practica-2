@@ -1,0 +1,26 @@
+name: Notificación por correo
+
+on:
+  push:
+    branches:
+      - main
+      - feature_a
+      - feature_b
+
+jobs:
+  send_email:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configurar acción de envío de correo
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.MAIL_USERNAME }}
+          password: ${{ secrets.MAIL_PASSWORD }}
+          subject: Cambios subidos a rama ${{ github.ref_name }}
+          to: hector.sandoval@iteso.mx
+          from: GitHub Actions <${{ secrets.MAIL_USERNAME }}>
+          body: |
+            Se han realizado cambios en la rama: ${{ github.ref_name }}
+            Commit: ${{ github.sha }}
